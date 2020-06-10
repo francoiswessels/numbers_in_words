@@ -1,4 +1,5 @@
 from math import ceil as _ceil
+from functools import lru_cache as _lru_cache
 import typing as _tp
 
 
@@ -41,7 +42,6 @@ _exponents_of_ten = {
     4: "trillion"
 }
 
-
 def _get_number_substring(phrase: str) -> _tp.Union[str, None]:
     # if the first char in the string is a number, we deem it number-like
     maybe_digits = [word for word in phrase.split(" ") if word[0].isdigit()]
@@ -53,6 +53,72 @@ def _get_number_substring(phrase: str) -> _tp.Union[str, None]:
     
     return None
 
+def _get_glue_100_to_10(num_100, num_10, num_1):
+    if num_100 > 0 and (num_10 > 0 or num_1 > 0): # Glue is needed
+        return " and "
+    
+    return ""  # Nothing to glue together
+
+def _get_glue_10_to_1(num_10, num_1):
+    if num_1 == 0 or num_10 == 0:
+        return ""
+    return "-"
+
+def _get_block_glue(num_100):
+    if num_100 > 0:
+        return ", "
+    return " and "
+
+@_lru_cache(maxsize=999)
+def _get_block_result(block: str):
+    num_100 = int(block[0])
+    num_10 = int(block[1])
+    num_1 = int(block[2])
+    
+    words_100, words_10, words_1 = "", "", ""
+    glue_100_to_10 = _get_glue_100_to_10(num_100, num_10, num_1)
+    glue_10_to_1 = _get_glue_10_to_1(num_10, num_1)
+    block_glue = _get_block_glue(num_100)
+
+    if num_100 > 0:  # This block has a hundred value
+        words_100 = f"{_map_to_words[num_100]} hundred"
+    
+    if num_10 == 1:  # Number is in the teens
+        words_teen = f"{_map_to_words[num_10*10 + num_1]}"
+        block_result = f"{words_100}{glue_100_to_10}{words_teen}"
+    else:
+        words_10 = f"{_map_to_words[num_10*10]}"
+        words_1 = f"{_map_to_words[num_1]}"
+        block_result = f"{words_100}{glue_100_to_10}{words_10}{glue_10_to_1}{words_1}"
+
+    return block_result, block_glue
+
+def number_in_words_2(number_str: str) -> str:
+    if not number_str.isdigit():
+        raise ValueError("The string is not a valid number")
+    
+    num_of_thousands = _ceil(len(number_str)/3)
+    num_digits = num_of_thousands*3
+    number_str = number_str.zfill(num_digits)
+    
+    result = ""
+    for i in range(num_of_thousands):
+        block = number_str[i*3:(i+1)*3]
+        
+        block_result, block_glue = _get_block_result(block)
+        
+        if block_result:
+            if i == (num_of_thousands - 1):
+                if i == 0:  # This condition amounts to a single block number
+                    result += block_result
+                else:  # The last block, but not the only block
+                    result += f"{block_glue}{block_result}"
+            elif i == 0: #  The first block, but not the only block
+                result += f"{block_result} {_exponents_of_ten[num_of_thousands - i - 1]}"
+            else:  # Neither the first, nor the last block
+                result += f"{block_glue}{block_result} {_exponents_of_ten[num_of_thousands - i - 1]}"
+    
+    return result
 
 def number_in_words(number_str: str) -> str:
     if not number_str.isdigit():
@@ -70,14 +136,15 @@ def number_in_words(number_str: str) -> str:
         num_10 = int(block[1])
         num_1 = int(block[2])
         
-        words_100, glue_100_to_10, words_10, glue_10_to_1, words_1 = "", "", "", "", ""
-        block_glue = ", "
-        if num_100 > 0:
+        words_100, words_10, words_1 = "", "", ""
+        glue_100_to_10, glue_10_to_1, block_glue = "", "", ", "
+
+        if num_100 > 0:  # This block has a hundred value
             words_100 = f"{_map_to_words[num_100]} hundred"
-            if num_1 > 0 and num_10 > 0:
+            if num_1 > 0 and num_10 > 0:  # This block has 10 and 1 values
                 glue_100_to_10 = " and "
                 glue_10_to_1 = "-"
-            elif num_1 > 0 or num_10 > 0:
+            elif num_1 > 0 or num_10 > 0: # This block has only a 10 or a 1 value
                 glue_100_to_10 = " and "
         elif num_1 > 0 and num_10 > 0:
             glue_10_to_1 = "-"
@@ -114,3 +181,10 @@ def number_in_words_from_phrase(phrase: str) -> str:
     
     return number_in_words(number_str)
 
+
+def number_in_words_from_phrase_2(phrase: str) -> str:
+    number_str = _get_number_substring(phrase)
+    if number_str is None:
+        return "number invalid"
+    
+    return number_in_words_2(number_str)

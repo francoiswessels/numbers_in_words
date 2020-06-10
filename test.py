@@ -7,7 +7,7 @@ import num_in_words as niw
 class TestModuleAPI(ut.TestCase):
     def setUp(self):
         self.public_members = [m for m in dir(niw) if not m[0] == "_"]
-        self.expected_members = ["number_in_words", "number_in_words_from_phrase"]
+        self.expected_members = ["number_in_words", "number_in_words_from_phrase", "number_in_words_2", "number_in_words_from_phrase_2"]
 
     def test_expected_public_module_members(self):
         for em in self.expected_members:
@@ -61,6 +61,18 @@ class TestProvidedTestCases(ut.TestCase):
             outcome = niw.number_in_words_from_phrase(scenario.input_value)
             self.assertEqual(outcome, scenario.expected_value, msg=f"Output incorrect for '{scenario.input_value}'")
 
+    def test_provided_scenarios_2(self):
+        for scenario in self.full_scenarios:
+            outcome = niw.number_in_words_from_phrase_2(scenario.input_value)
+            self.assertEqual(outcome, scenario.expected_value, msg=f"Output incorrect for '{scenario.input_value}'")
+
+
+class TestByComparingTwoApproaches(ut.TestCase):
+    def test_a_range(self):
+        for i in range(100000000):
+            v1 = niw.number_in_words(str(i))
+            v2 = niw.number_in_words_2(str(i))
+            self.assertEqual(v1, v2)
 
 if __name__ == "__main__":
     ut.main()
