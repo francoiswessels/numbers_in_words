@@ -61,7 +61,7 @@ Outcome: negative two hundred and seventy-three
 ## Remarks on design
 
 ### Dependencies and interface
-To start with, the aim was to use only standard Python, and not introduce any third party packages. The package needed to run out "out of the box", which it does as long as Python 3.6+ is used.
+To start with, the aim was to use only standard Python, and not introduce any third party packages. The package needed to run "out of the box", which it does as long as Python 3.6+ is used.
 
 It is was important to me that the package interface is clean i.e. that only functions and variables that are useful to the user are public in the module object after it has been imported. The outcome of that is as follows:
 ```
