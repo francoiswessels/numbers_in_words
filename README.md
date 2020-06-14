@@ -89,7 +89,7 @@ That number is found and then processed as blocks as follows:
 
 Notice the following:
 - The leading zeros, which means that each block is complete and we never need to deal with exceptions.
-- There two blocks with the value "345". Those blocks will have the same result, so the option is provided to cache a result in case another block has the same value, giving a bit of a speedup.
+- There are two blocks with the value "345". Those blocks will have the same result, so the option is provided to cache a result in case another block has the same value, giving a bit of a speedup.
 
 It looks like _formatted string literals_, or F-strings, are faster than ```"".join([...])``` and more readable. I did not explore the use of ```array```, because F-strings are just so easy to use and my gut says that any further speedup would be negligible.
 
