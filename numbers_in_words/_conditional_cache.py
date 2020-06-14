@@ -1,7 +1,7 @@
 """Help on package _conditional_cache:
 
 NAME
-    _string_processing
+    _conditional_cache
 
 DESCRIPTION
     A private module belonging to numbers_in_words package.

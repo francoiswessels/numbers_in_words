@@ -75,7 +75,7 @@ It is was important to me that the package interface is clean i.e. that only fun
 
 Broadly, two approaches were investigated and the faster one selected and then refined a little bit. The difference between the approaches lies in whether the numbers are converted to integers, or not.
 
-It turns out that converting the strings to integers and then working my way through that string with ..., ```integer // 1000```, ```integer // 100```, ```integer // 10```, followed by subtracting the processed value from the number was simply expensive, probably because ultimately it involves converting strings to integers, and then back to strings again. The actualy arithmetic may also not be trivial in, but I stopped short of completely profiling the code.
+It turns out that converting the strings to integers and then working my way through that string with ```..., integer // 1000```, ```integer // 100```, ```integer // 10```, followed by subtracting the processed value from the number was simply expensive, probably because ultimately it involves converting strings to integers, and then back to strings again. The actualy arithmetic may also not be trivial in, but I stopped short of completely profiling the code.
 
 It was faster to just keep the strings as strings, and working them in slices of three digits at a time. Breaking the string up into blocks of three and proceessing it on that basis had the added benefit that the repeating logic required to do that could be broken out into its own function for testing and caching.
 

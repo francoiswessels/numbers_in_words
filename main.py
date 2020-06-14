@@ -13,7 +13,8 @@ def demo():
         "Interactive and printable 10022 ZIP code.",
         "The database has 66723107008 records.",
         "I received 23 456,9 KGs.",
-        "It doesn't get any colder than -273 degrees Kelvin."]
+        "It doesn't get any colder than -273 degrees Kelvin.",
+        "There is 0 chance of fell freezing over!"]
 
     print("These are the results of some test cases:\n")
     for tc in test_cases:
@@ -66,7 +67,7 @@ if __name__ == "__main__":
         "-t", "--timeit",
         action="store_true",
         help="display the results of some timed runs, to get a sense of what the cached functionality achieves.")
-    
+
     args = parser.parse_args()
 
     if args.demo:

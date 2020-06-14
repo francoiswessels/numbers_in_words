@@ -60,7 +60,7 @@ def number_in_words(number_str: str, cached=False) -> str:
 
     if number_str == "0":
         return "zero"
-    
+
     if number_str[0] == "-":
         number_str = number_str[1:]
         negative = "negative "

@@ -11,8 +11,8 @@ DESCRIPTION
     The two functions allow for the optional use of an LRU cached, at the expense
     of a little bit of additional memory consumption.
 
-    All numbers must be positive integers. The range of numbers that can be expressed is
-    negative to positive 999999999999999999999999999999999999999999 (14 groups of three 9's).
+    The range of numbers that can be expressed is negative to positive
+    999999999999999999999999999999999999999999 (14 groups of three 9's).
 
 CONTENTS
     number_in_words (function)
