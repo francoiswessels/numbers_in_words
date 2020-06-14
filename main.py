@@ -7,14 +7,17 @@ import numbers_in_words as niw
 
 def demo():
     test_cases: List[str] = [
-        "The pump is 536 deep underground.",
+        "The pump is 536.5m deep underground.",
         "We processed 9121 records.",
         "Variables reported as having a number invalid missing type #65678.",
         "Interactive and printable 10022 ZIP code.",
         "The database has 66723107008 records.",
         "I received 23 456,9 KGs.",
         "It doesn't get any colder than -273 degrees Kelvin.",
-        "There is 0 chance of fell freezing over!"]
+        "There is 0 chance of hell freezing over!",
+        "Is the sun more than 10,000,000km away from us?",
+        "South Africa's bank balance is at least ZAR -54,343,234.45!"
+        ]
 
     print("These are the results of some test cases:\n")
     for tc in test_cases:
@@ -29,6 +32,7 @@ def run_file(file_name):
         for line in fread:
             print(f"Found  : {line}", end="")
             print(f"Outcome: {niw.number_in_words_from_phrase(line)}\n")
+
 
 def time():
     setup = "import numbers_in_words as niw"

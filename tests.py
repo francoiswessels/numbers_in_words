@@ -1,8 +1,9 @@
-from typing import List, Union
+from typing import List, Union, Tuple
 import unittest as ut
 
 import numbers_in_words as niw
 from numbers_in_words import _string_processing as sp
+from numbers_in_words import _number_parts as np
 
 
 class TestModuleAPI(ut.TestCase):
@@ -55,25 +56,55 @@ class TestProvidedTestCases(ut.TestCase):
                 "There is 0 chance of fell freezing over!",
                 "zero")]
 
-        self.number_scenarios: List[Scenario] = [
-            Scenario("The pump is 536 deep underground.", "536"),
-            Scenario("We processed 9121 records.", "9121"),
-            Scenario("Variables reported as having a number invalid missing type #65678.", None),
-            Scenario("Interactive and printable 10022 ZIP code.", "10022"),
-            Scenario("The database has 66723107008 records.", "66723107008"),
-            Scenario("It doesn't get any colder than -273", "-273"),
-            Scenario("I received 23 456,9 KGs.", None),
-            Scenario("There is 0 chance of fell freezing over!", "0")]
-
-    def test_number_extraction(self):
-        for scenario in self.number_scenarios:
-            outcome = sp._get_number_substring(scenario.input_value)
-            self.assertEqual(outcome, scenario.expected_value, msg=f"Output incorrect for '{scenario.input_value}'")
+        self.number_extraction_cases: List[Tuple[str, np.NumberParts]] = [
+            ("The pump is 536 deep underground.", np.NumberParts("536")),
+            ("We processed 9121 records.", np.NumberParts("9121")),
+            ("Variables reported as having a number invalid missing type #65678.", np.NumberParts()),
+            ("Interactive and printable 10022 ZIP code.", np.NumberParts("10022")),
+            ("The database has 66723107008 records.", np.NumberParts("66723107008")),
+            ("It doesn't get any colder than -273", np.NumberParts("273", negative=True)),
+            ("I received 23 456,9 KGs.", np.NumberParts())]
 
     def test_provided_scenarios(self):
         for scenario in self.full_scenarios:
             outcome = niw.number_in_words_from_phrase(scenario.input_value)
             self.assertEqual(outcome, scenario.expected_value, msg=f"Output incorrect for '{scenario.input_value}'")
+
+    def test_number_extraction(self):
+        for case in self.number_extraction_cases:
+            outcome = sp._get_number_parts_from_phrase(case[0])
+            self.assertEqual(outcome, case[1], msg=f"Output incorrect for '{case[0]}'")
+
+
+class TestAdditionalTestCases(ut.TestCase):
+    def setUp(self):
+        self.full_scenarios: List[Scenario] = [
+            Scenario(
+                "The pump is 536.5m underground.",
+                "five hundred and thirty-six point five"),
+            Scenario(
+                "Is the sun more than 10,000,000.5km away from us?.",
+                "ten million point five"
+            )]
+
+        self.number_extraction_cases: List[Tuple[str, np.NumberParts]] = [
+            ("The car travels at 65.38kph.", np.NumberParts("65", "38", "kph.")),
+            ("The rocket travels at 1,965.38kph.", np.NumberParts("1965", "38", "kph.")),
+            ("The rocket travels at 19,65.38kph.", np.NumberParts()),
+            ("The rocket travels at 1,965.38kph.", np.NumberParts("1965", "38", "kph.")),
+            ("Is the sun more than 10,000,000km away from us?.", np.NumberParts("10000000", suffix="km")),
+            ("The pump is 536 deep underground.", np.NumberParts("536")),
+            ("There is 0 chance of fell freezing over!", np.NumberParts("0"))]
+
+    def test_additional_scenarios(self):
+        for scenario in self.full_scenarios:
+            outcome = niw.number_in_words_from_phrase(scenario.input_value)
+            self.assertEqual(outcome, scenario.expected_value, msg=f"Output incorrect for '{scenario.input_value}'")
+
+    def test_additional_number_extraction(self):
+        for case in self.number_extraction_cases:
+            outcome = sp._get_number_parts_from_phrase(case[0])
+            self.assertEqual(outcome, case[1], msg=f"Output incorrect for '{case[0]}'")
 
 
 if __name__ == "__main__":

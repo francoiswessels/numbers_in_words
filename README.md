@@ -2,9 +2,9 @@
 
 A small module that helps with the output of the value of an integer in words. The package makes two functions available to achieve this, namely 'number_in_words' and 'number_in_words_from_phrase'.
 
-The two functions allow for the optional use of an LRU cached, at the expense of a little bit of additional memory consumption.
+The two functions allow for the optional use of an LRU cache, at the expense of a little bit of additional memory consumption.
 
-The range of numbers that can be expressed is negative to positive 999999999999999999999999999999999999999999 (14 groups of three 9's).
+The range of numbers that can be expressed is any negative or positive number where the whole number component does not exceed 999,999,999,999,999,999,999,999,999,999,999,999,999,999 (14 groups of three 9's). The decimal component is limited only by your machine's memory.
 
 ## Dependencies
 
@@ -56,6 +56,15 @@ Outcome: number invalid
 Found  : It doesn't get any colder than -273 degrees Kelvin.
 Outcome: negative two hundred and seventy-three
 
+Found  : There is 0 chance of hell freezing over!
+Outcome: zero
+
+Found  : Is the sun more than 10,000,000km away from us?
+Outcome: ten million
+
+Found  : South Africa's bank balance is at least ZAR -54,343,234.45!
+Outcome: negative fify-four million, three hundred and forty-three thousand, two hundred and thirty-four point four five
+
 ```
 
 ## Remarks on design
@@ -67,7 +76,7 @@ It is was important to me that the package interface is clean i.e. that only fun
 ```
 >>> import numbers_in_words as niw
 >>> dir(niw)
-['__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__', '_conditional_cache', '_string_processing', 'number_in_words', 'number_in_words_from_phrase']
+['__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__', '_conditional_cache', '_number_parts', '_string_processing', '_value_maps', 'number_in_words', 'number_in_words_from_phrase']
 >>> 
 ```
 
@@ -75,9 +84,9 @@ It is was important to me that the package interface is clean i.e. that only fun
 
 Broadly, two approaches were investigated and the faster one selected and then refined a little bit. The difference between the approaches lies in whether the numbers are converted to integers, or not.
 
-It turns out that converting the strings to integers and then working my way through that string with ```..., integer // 1000```, ```integer // 100```, ```integer // 10```, followed by subtracting the processed value from the number was simply expensive, probably because ultimately it involves converting strings to integers, and then back to strings again. The actualy arithmetic may also not be trivial in, but I stopped short of completely profiling the code.
+It turns out that converting the strings to integers and then working my way through that string with ```..., integer // 1000```, ```integer // 100```, ```integer // 10```, followed by subtracting the processed value from the number was simply expensive, probably because ultimately it involves converting strings to integers, and then back to strings again. The actual arithmetic may also not be trivial in terms of computation, but I stopped short of completely profiling the code.
 
-It was faster to just keep the strings as strings, and working them in slices of three digits at a time. Breaking the string up into blocks of three and proceessing it on that basis had the added benefit that the repeating logic required to do that could be broken out into its own function for testing and caching.
+It was faster to just keep the strings as strings, and working through them in slices of three digits at a time. Breaking the string up into blocks of three and processing it on that basis had the added benefit that the repeating logic required to do that could be broken out into its own function for testing and caching.
 
 This is a brief description of the approach:
 
@@ -95,13 +104,20 @@ It looks like _formatted string literals_, or F-strings, are faster than ```"".j
 
 #### Optional Caching
 
-I've made caching optional because it gives me the opportunity to demonstrate the use of a custom _decorator class_. This is certainly more complex than it perhaps needs to be, but I thought it was a little bit clever.
+Caching is supported at both the block level and the number string level, but not on the phrase level. Caching is on by default on the block level, but off by default on the number level.
 
-If it wasn't for the want to demonstrate this, I would make the caching a permament feature, not least because it seems to always result in faster run times.
+This arrangement was chosen because block values are most likely to repeat themselves, there is only 1000 different block values and a block is a known three characters long. Numbers on the other hand are much more varied and can be much longer. Thus the benefit from caching numbers is much less and the memory consumption much higher.
 
-#### To investigate
+Nevertheless, the feature is there, even if just to demonstrate a certain understanding of the problem.
 
-Why does the runtime decrease when caching is switched on even for the "99" example, which would not result in the cache being used?
+### run, maintain, evolve
+
+Some care was taken to ensure that utility functions (pretty much all the _internal ones) are pure functions and that they have a single purpose that is decoupled from other methods as much as possible. This, combined with the user tests, has made the inevitable errors arising from extending the code relatively easy to debug. That being said, the tests can be refined to make it clearer where in the code a problem that is causing a test failure is arising.
+
+The introduction of the NumberParts class has helped to organise the handover of results from functions that interpret strings as they are received from user code to functions that interpret these results. It also offers some validation and comparison logic which makes it useful for implementing unit tests. The need for this decoupling only really arose once the functionality was extended to handle numbers with decimal components and thousands separators. Now that it does exist, the opportunity to attach more functionality to that class arises. Is a number-in-words a property of a NumberParts class, or is NumberParts class just a d.t.o? At the moment it's just a d.t.o. and signification restructurig will be required to extend it to take on the number-in-words responsibility.
+
+Those questions aside, the NumberParts class makes the code significantly more maintainable.
+
 
 ### A note on linting:
 

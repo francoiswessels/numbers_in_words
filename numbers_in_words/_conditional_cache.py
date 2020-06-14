@@ -1,4 +1,4 @@
-"""Help on package _conditional_cache:
+"""Help on module _conditional_cache:
 
 NAME
     _conditional_cache
@@ -30,7 +30,7 @@ class ConditionalLRUCache:
 
         return wrap
 
-    @lru_cache(maxsize=999)
+    @lru_cache(maxsize=1000)
     def _cached_call(self, *args, **kwargs):
         return self.f(*args, **kwargs)
 
