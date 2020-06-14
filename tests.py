@@ -50,7 +50,10 @@ class TestProvidedTestCases(ut.TestCase):
                 "negative two hundred and seventy-three"),
             Scenario(
                 "I received 23 456,9 KGs.",
-                "number invalid")]
+                "number invalid"),
+            Scenario(
+                "There is 0 chance of fell freezing over!",
+                "zero")]
 
         self.number_scenarios: List[Scenario] = [
             Scenario("The pump is 536 deep underground.", "536"),
@@ -59,7 +62,8 @@ class TestProvidedTestCases(ut.TestCase):
             Scenario("Interactive and printable 10022 ZIP code.", "10022"),
             Scenario("The database has 66723107008 records.", "66723107008"),
             Scenario("It doesn't get any colder than -273", "-273"),
-            Scenario("I received 23 456,9 KGs.", None)]
+            Scenario("I received 23 456,9 KGs.", None),
+            Scenario("There is 0 chance of fell freezing over!", "0")]
 
     def test_number_extraction(self):
         for scenario in self.number_scenarios:
