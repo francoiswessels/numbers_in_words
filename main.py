@@ -1,31 +1,79 @@
-
-from typing import List, Dict, Union
+import argparse as ap
+from typing import List
 import timeit
+
 import numbers_in_words as niw
 
 
-class Scenario:
-    def __init__(self, input_value: str, expected_value: Union[str, None]):
-        self.input_value = input_value
-        self.expected_value = expected_value
+def demo():
+    test_cases: List[str] = [
+        "The pump is 536 deep underground.",
+        "We processed 9121 records.",
+        "Variables reported as having a number invalid missing type #65678.",
+        "Interactive and printable 10022 ZIP code.",
+        "The database has 66723107008 records.",
+        "I received 23 456,9 KGs.",
+        "It doesn't get any colder than -273 degrees Kelvin."]
+
+    print("These are the results of some test cases:\n")
+    for tc in test_cases:
+        print(tc, "\n>> ", niw.number_in_words_from_phrase(tc))
+        print("")
 
 
-number_scenarios: List[Scenario] = [
-    Scenario("The pump is 536 deep underground.", "536"),
-    Scenario("We processed 9121 records.", "9121"),
-    Scenario("Variables reported as having a number invalid missing type #65678.", None),
-    Scenario("Interactive and printable 10022 ZIP code.", "10022"),
-    Scenario("The database has 66723107008 records.", "66723107008"),
-    Scenario("I received 23 456,9 KGs.", None)]
+def run_file(file_name):
+    print(f"Converting contents of {file_name}:\n")
+
+    with open(file_name, "r") as fread:
+        for line in fread:
+            print(f"Found  : {line}", end="")
+            print(f"Outcome: {niw.number_in_words_from_phrase(line)}\n")
+
+def time():
+    setup = "import numbers_in_words as niw"
+
+    statement1 = "niw.number_in_words_from_phrase('99', cached=True)"
+    statement2 = "niw.number_in_words_from_phrase('99', cached=False)"
+    statement3 = "niw.number_in_words_from_phrase('99999999999999999999', cached=True)"
+    statement4 = "niw.number_in_words_from_phrase('99999999999999999999', cached=False)"
+
+    t1 = round(timeit.timeit(stmt=statement1, setup=setup, number=100000), 5)
+    print(f"Convert 99 to words, with caching, 100 000 times                     : {t1}s")
+    t2 = round(timeit.timeit(stmt=statement2, setup=setup, number=100000), 5)
+    print(f"Convert 99 to words, without caching, 100 000 times                  : {t2}s")
+    t3 = round(timeit.timeit(stmt=statement3, setup=setup, number=100000), 5)
+    print(f"Convert 99999999999999999999 to words, with caching, 100 000 times   : {t3}s")
+    t4 = round(timeit.timeit(stmt=statement4, setup=setup, number=100000), 5)
+    print(f"Convert 99999999999999999999 to words, without caching, 100 000 times: {t4}s")
 
 
-# for s in number_scenarios:
-#     print(s.expected_value, niw.number_in_words_from_phrase(s.input_value))
+if __name__ == "__main__":
+    file = ""
+    parser = ap.ArgumentParser(
+        description="a small app that find some integers and converts their value into words")
 
-statement1 = "niw.number_in_words_from_phrase('999', cached=False)"
-statement2 = "niw.number_in_words_from_phrase('99999999999999999999', cached=True)"
+    parser.add_argument(
+        "-d", "--demo",
+        action="store_true",
+        help="display a list of result that demonstrates what this package does.")
 
-setup = "import numbers_in_words as niw"
+    parser.add_argument(
+        "-f", "--file",
+        type=str,
+        help="process the contents of FILE, if it exists.")
 
-print(timeit.timeit(stmt=statement1, setup=setup, number=100000))
-print(timeit.timeit(stmt=statement2, setup=setup, number=100000))
+    parser.add_argument(
+        "-t", "--timeit",
+        action="store_true",
+        help="display the results of some timed runs, to get a sense of what the cached functionality achieves.")
+    
+    args = parser.parse_args()
+
+    if args.demo:
+        demo()
+
+    if args.file:
+        run_file(args.file)
+
+    if args.timeit:
+        time()

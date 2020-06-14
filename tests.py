@@ -2,6 +2,7 @@ from typing import List, Union
 import unittest as ut
 
 import numbers_in_words as niw
+from numbers_in_words import _string_processing as sp
 
 
 class TestModuleAPI(ut.TestCase):
@@ -18,15 +19,6 @@ class TestModuleAPI(ut.TestCase):
     def test_no_unexpected_public_module_members(self):
         other_members = [m for m in self.public_members if m not in self.expected_members]
         self.assertFalse(any(other_members), msg=f"Found unexpected public members in module:\n\t{other_members}")
-
-
-class TestValueMapComplete(ut.TestCase):
-    def test_map_members_complete(self):
-        expected_keys = [i for i in range(0, 20)]
-        expected_keys += [i*10 for i in range(2, 10)]
-        mapped_keys = niw._num_to_words_map.keys()
-        outcomes = [ek in mapped_keys for ek in expected_keys]
-        self.assertTrue(all(outcomes), msg=outcomes)
 
 
 class Scenario:
@@ -54,6 +46,9 @@ class TestProvidedTestCases(ut.TestCase):
                 "The database has 66723107008 records.",
                 "sixty-six billion, seven hundred and twenty-three million, one hundred and seven thousand and eight"),
             Scenario(
+                "It doesn't get any colder than -273 degrees Kelvin.",
+                "negative two hundred and seventy-three"),
+            Scenario(
                 "I received 23 456,9 KGs.",
                 "number invalid")]
 
@@ -63,11 +58,12 @@ class TestProvidedTestCases(ut.TestCase):
             Scenario("Variables reported as having a number invalid missing type #65678.", None),
             Scenario("Interactive and printable 10022 ZIP code.", "10022"),
             Scenario("The database has 66723107008 records.", "66723107008"),
+            Scenario("It doesn't get any colder than -273", "-273"),
             Scenario("I received 23 456,9 KGs.", None)]
 
     def test_number_extraction(self):
         for scenario in self.number_scenarios:
-            outcome = niw._get_number_substring(scenario.input_value)
+            outcome = sp._get_number_substring(scenario.input_value)
             self.assertEqual(outcome, scenario.expected_value, msg=f"Output incorrect for '{scenario.input_value}'")
 
     def test_provided_scenarios(self):
