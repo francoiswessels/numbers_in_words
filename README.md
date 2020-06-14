@@ -4,7 +4,7 @@ A small module that helps with the output of the value of an integer in words. T
 
 The two functions allow for the optional use of an LRU cached, at the expense of a little bit of additional memory consumption.
 
-All numbers must be positive integers. The range of numbers that can be expressed is negative to positive 999999999999999999999999999999999999999999 (14 groups of three 9's).
+The range of numbers that can be expressed is negative to positive 999999999999999999999999999999999999999999 (14 groups of three 9's).
 
 ## Dependencies
 
