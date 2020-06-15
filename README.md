@@ -69,17 +69,6 @@ Outcome: negative fify-four million, three hundred and forty-three thousand, two
 
 ## Remarks on design
 
-### Dependencies and interface
-To start with, the aim was to use only standard Python, and not introduce any third party packages. The package needed to run "out of the box", which it does as long as Python 3.6+ is used.
-
-For ease of use, it was important that the package interface is clean i.e. that to the extent possible only functions and variables that are useful to the user are public in the module object after it has been imported. The outcome of that is as follows:
-```
->>> import numbers_in_words as niw
->>> dir(niw)
-['__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__', '_numbers_in_words_modules', 'number_in_words', 'number_in_words_from_phrase']
->>> 
-```
-
 ### Assumptions
 
 - Numbers can have both whole number and decimal components.
@@ -90,6 +79,16 @@ For ease of use, it was important that the package interface is clean i.e. that 
 - Thousands separators are "," and are optional. However, if they are present in a string they must be used concistently through the string.
 - Only phrases with one number in them will be successfully procesed. If it appears that there is more than one number, an invalid response is returned.
 
+### Dependencies and interface
+To start with, the aim was to use only standard Python, and not introduce any third party packages. The package needed to run "out of the box", which it does as long as Python 3.6+ is used.
+
+For ease of use, it was important that the package interface is clean i.e. that to the extent possible only functions and variables that are useful to the user are public in the module object after it has been imported. The outcome of that is as follows:
+```
+>>> import numbers_in_words as niw
+>>> dir(niw)
+['__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__', '_numbers_in_words_modules', 'number_in_words', 'number_in_words_from_phrase']
+>>> 
+```
 ### Algorithm
 
 Two approaches were investigated and the faster one selected and then refined and extended. The difference between the approaches lies in whether the numbers are converted to integers, or not.
