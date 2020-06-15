@@ -1,7 +1,7 @@
-"""Help on module _conditional_cache:
+"""Help on module conditional_cache:
 
 NAME
-    _conditional_cache
+    conditional_cache
 
 DESCRIPTION
     A private module belonging to numbers_in_words package.

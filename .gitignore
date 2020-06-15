@@ -1,4 +1,4 @@
 /.vscode
-/__pycache__
 /.mypy_cache
-/numbers_in_words/__pycache__
+__pycache__/
+ *.pyc

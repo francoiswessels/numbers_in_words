@@ -1,7 +1,7 @@
-"""Help on package _number_parts:
+"""Help on package number_parts:
 
 NAME
-    _number_parts
+    number_parts
 
 DESCRIPTION
     A private module belonging to numbers_in_words package.

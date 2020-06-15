@@ -1,7 +1,7 @@
-"""Help on package _string_processing:
+"""Help on package string_processing:
 
 NAME
-    _string_processing
+    string_processing
 
 DESCRIPTION
     A private module belonging to numbers_in_words package.
