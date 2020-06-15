@@ -16,7 +16,6 @@ DESCRIPTION
     (14 groups of three 9's). The decimal component is limited only by your machine's memory.
 
 ASSUMPTIONS
-
     - Numbers can have both whole number and decimal components.
     - Negative numbers are indicated by a "-" prefix.
     - No other prefixes are recognised and will be interpreted to mean that what follows is not a
