@@ -2,8 +2,8 @@ from typing import List, Union, Tuple
 import unittest as ut
 
 import numbers_in_words as niw
-from numbers_in_words import _string_processing as sp
-from numbers_in_words import _number_parts as np
+import numbers_in_words._numbers_in_words_modules.string_processing as sp
+import numbers_in_words._numbers_in_words_modules.number_parts as np
 
 
 class TestModuleAPI(ut.TestCase):

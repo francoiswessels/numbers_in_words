@@ -37,19 +37,26 @@ def run_file(file_name):
 def time():
     setup = "import numbers_in_words as niw"
 
-    statement1 = "niw.number_in_words_from_phrase('99', cached=True)"
-    statement2 = "niw.number_in_words_from_phrase('99', cached=False)"
-    statement3 = "niw.number_in_words_from_phrase('99999999999999999999', cached=True)"
-    statement4 = "niw.number_in_words_from_phrase('99999999999999999999', cached=False)"
+    statement1 = "niw.number_in_words_from_phrase('99', cached_blocks=False)"
+    statement2 = "niw.number_in_words_from_phrase('99')"
+    statement3 = "niw.number_in_words_from_phrase('99', cached_numbers=True)"
+    statement4 = "niw.number_in_words_from_phrase('99999999999999999999', cached_blocks=False)"
+    statement5 = "niw.number_in_words_from_phrase('99999999999999999999')"
+    statement6 = "niw.number_in_words_from_phrase('99999999999999999999', cached_numbers=False)"
 
     t1 = round(timeit.timeit(stmt=statement1, setup=setup, number=100000), 5)
-    print(f"Convert 99 to words, with caching, 100 000 times                     : {t1}s")
+    print(f"Convert 99 to words, without caching, 100 000 times                                 : {t1}s")
     t2 = round(timeit.timeit(stmt=statement2, setup=setup, number=100000), 5)
-    print(f"Convert 99 to words, without caching, 100 000 times                  : {t2}s")
+    print(f"Convert 99 to words, with block caching, 100 000 times                              : {t2}s")
     t3 = round(timeit.timeit(stmt=statement3, setup=setup, number=100000), 5)
-    print(f"Convert 99999999999999999999 to words, with caching, 100 000 times   : {t3}s")
+    print(f"Convert 99 to words, with block and number caching, 100 000 times                   : {t3}s")
+
     t4 = round(timeit.timeit(stmt=statement4, setup=setup, number=100000), 5)
-    print(f"Convert 99999999999999999999 to words, without caching, 100 000 times: {t4}s")
+    print(f"Convert 99999999999999999999 to words, without caching, 100 000 times               : {t4}s")
+    t5 = round(timeit.timeit(stmt=statement5, setup=setup, number=100000), 5)
+    print(f"Convert 99999999999999999999 to words, with block caching, 100 000 times            : {t5}s")
+    t6 = round(timeit.timeit(stmt=statement6, setup=setup, number=100000), 5)
+    print(f"Convert 99999999999999999999 to words, with block and number caching, 100 000 times : {t6}s")
 
 
 if __name__ == "__main__":

@@ -72,7 +72,7 @@ Outcome: negative fify-four million, three hundred and forty-three thousand, two
 ### Dependencies and interface
 To start with, the aim was to use only standard Python, and not introduce any third party packages. The package needed to run "out of the box", which it does as long as Python 3.6+ is used.
 
-For ease of use, it was important that the package interface is clean i.e. that only functions and variables that are useful to the user are public in the module object after it has been imported. The outcome of that is as follows:
+For ease of use, it was important that the package interface is clean i.e. that to the extent possible only functions and variables that are useful to the user are public in the module object after it has been imported. The outcome of that is as follows:
 ```
 >>> import numbers_in_words as niw
 >>> dir(niw)
@@ -82,9 +82,15 @@ For ease of use, it was important that the package interface is clean i.e. that 
 
 ### Algorithm
 
-Broadly, two approaches were investigated and the faster one selected and then refined a little bit. The difference between the approaches lies in whether the numbers are converted to integers, or not.
+Two approaches were investigated and the faster one selected and then refined and extended. The difference between the approaches lies in whether the numbers are converted to integers, or not.
 
-It turns out that converting the strings to integers and then working my way through that string with ```..., integer // 1000```, ```integer // 100```, ```integer // 10```, followed by subtracting the processed value from the number was simply expensive, probably because ultimately it involves converting strings to integers, and then back to strings again. The actual arithmetic may also not be trivial in terms of computation, but I stopped short of completely profiling the code.
+To help with the discussion, it is useful to set out how number strings are interpreted in the code. Each string is broken up as follows:
+
+    <integer><decimal_point><decimals><suffix>
+
+The integer component, of course, is expressed in groups of three numbers, while decimals are just listed in order. The suffix is just there to help with the interpretation of numbers in the context you may find them.
+
+It turns out that converting the strings to integers and then working through that integers with ```..., integer // 1000```, ```integer // 100```, ```integer // 10```, followed by subtracting the processed value from the number was more expensive, probably because it ultimately involves converting strings to integers, and then back to strings again. The actual arithmetic may also not be trivial as a proportion of total computation, but I stopped short of completely profiling the code.
 
 It was faster to just keep the strings as strings, and working through them in slices of three digits at a time. Breaking the string up into blocks of three and processing it on that basis had the added benefit that the repeating logic required to do that could be broken out into its own function for testing and caching.
 
@@ -97,7 +103,7 @@ That number is found and then processed as blocks as follows:
 ```"001" "345" "839" "345"```
 
 Notice the following:
-- The leading zeros, which means that each block is complete and we never need to deal with exceptions.
+- The leading zeros, which means that each block is complete and we never need to deal with exceptions, making the block interpretation code simpler and easier to understand.
 - There are two blocks with the value "345". Those blocks will have the same result, so the option is provided to cache a result in case another block has the same value, giving a bit of a speedup.
 
 It looks like _formatted string literals_, or F-strings, are faster than ```"".join([...])``` and more readable. I did not explore the use of ```array```, because F-strings are just so easy to use and my gut says that any further speedup would be negligible.
@@ -114,10 +120,9 @@ Nevertheless, the feature is there, even if just to demonstrate a certain unders
 
 Some care was taken to ensure that utility functions (pretty much all the _internal ones) are pure functions and that they have a single purpose that is decoupled from other methods as much as possible. This, combined with the user tests, has made the inevitable errors arising from extending the code relatively easy to debug. That being said, the tests can be refined to make it clearer where in the code a problem that is causing a test failure is arising.
 
-The introduction of the NumberParts class has helped to organise the handover of results from functions that interpret strings as they are received from user code to functions that interpret these results. It also offers some validation and comparison logic which makes it useful for implementing unit tests. The need for this decoupling only really arose once the functionality was extended to handle numbers with decimal components and thousands separators. Now that it does exist, the opportunity to attach more functionality to that class arises. Is a number-in-words a property of a NumberParts class, or is NumberParts class just a d.t.o? At the moment it's just a d.t.o. and signification restructurig will be required to extend it to take on the number-in-words responsibility.
+The introduction of the NumberParts class has helped to organise the handover of results from functions that interpret strings as they are received from user code to functions that interpret these results. It also offers some validation and comparison logic which makes it useful for implementing unit tests. The need for this decoupling only really arose once the functionality was extended to handle numbers with decimal components and thousands separators. Now that it does exist, the opportunity to attach more functionality to that class is there. Is number_in_words a property of a NumberParts class, or is NumberParts class just a d.t.o? At the moment it's just a d.t.o. and significant restructurig will be required to extend it to take on the number-in-words responsibility.
 
 Those questions aside, the NumberParts class makes the code significantly more maintainable.
-
 
 ### A note on linting:
 

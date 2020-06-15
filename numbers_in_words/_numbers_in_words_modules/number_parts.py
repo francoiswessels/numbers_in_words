@@ -27,6 +27,8 @@ class NumberParts:
         self.decimals = decimals
         self.suffix = suffix
 
+        # TODO: Consider extending this to accommodate regional number interpretation
+
     @property
     def is_valid(self) -> bool:
         return True if self.integer else False

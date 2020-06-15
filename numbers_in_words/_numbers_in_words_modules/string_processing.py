@@ -49,7 +49,7 @@ def number_in_words_from_phrase(phrase: str, cached_blocks=True, cached_numbers=
     if not number_parts.is_valid:
         return "number invalid"
 
-    number_str = _number_in_words_from_parts(number_parts)
+    number_str = _get_number_in_words_from_parts(number_parts)
 
     return number_str
 
@@ -76,10 +76,10 @@ def number_in_words(number: str, cached_blocks=True, cached_numbers=False) -> st
 
     parts = _get_number_parts_from_word(number)
 
-    return _number_in_words_from_parts(parts)
+    return _get_number_in_words_from_parts(parts)
 
 
-def _number_in_words_from_parts(number_parts: np.NumberParts):
+def _get_number_in_words_from_parts(number_parts: np.NumberParts):
     number_str: str = cast(str, number_parts.integer)
     num_of_blocks = ceil(len(number_str)/3)  # A block is three digits, always
     number_str = number_str.zfill(num_of_blocks*3)
@@ -106,6 +106,7 @@ def _number_in_words_from_parts(number_parts: np.NumberParts):
 
     if number_parts.decimals:
         decimals = " ".join([maps.num_to_words_map[d] for d in number_parts.decimals])
+        # TODO: 'point' will have to change in response to regional settings, once they are integrated
         decimals = f" point {decimals}"
         return f"{negative}{integer_result}{decimals}"
 
@@ -176,7 +177,7 @@ def _get_number_parts_from_word(word: str, separator: str = ",", decimal_point: 
         integer = word[1:decimal_index].replace(",", "")
     else:
         integer = word[1:].replace(",", "")
-    
+
     return np.NumberParts(integer, decimals, suffix, True)
 
 
