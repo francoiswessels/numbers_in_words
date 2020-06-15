@@ -11,8 +11,9 @@ DESCRIPTION
     The two functions allow for the optional use of an LRU cached, at the expense
     of a little bit of additional memory consumption.
 
-    The range of numbers that can be expressed is negative to positive
-    999999999999999999999999999999999999999999 (14 groups of three 9's).
+    The range of numbers that can be expressed is any negative or positive number where the whole
+    number component does not exceed 999,999,999,999,999,999,999,999,999,999,999,999,999,999
+    (14 groups of three 9's). The decimal component is limited only by your machine's memory.
 
 CONTENTS
     number_in_words (function)
@@ -25,4 +26,5 @@ AUTHOR:
     https://github.com/francoiswessels/numbers_in_words
 """
 
-from ._string_processing import number_in_words, number_in_words_from_phrase
+
+from ._numbers_in_words_modules.string_processing import number_in_words, number_in_words_from_phrase

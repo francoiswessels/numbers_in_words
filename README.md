@@ -72,11 +72,11 @@ Outcome: negative fify-four million, three hundred and forty-three thousand, two
 ### Dependencies and interface
 To start with, the aim was to use only standard Python, and not introduce any third party packages. The package needed to run "out of the box", which it does as long as Python 3.6+ is used.
 
-It is was important to me that the package interface is clean i.e. that only functions and variables that are useful to the user are public in the module object after it has been imported. The outcome of that is as follows:
+For ease of use, it was important that the package interface is clean i.e. that only functions and variables that are useful to the user are public in the module object after it has been imported. The outcome of that is as follows:
 ```
 >>> import numbers_in_words as niw
 >>> dir(niw)
-['__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__', '_conditional_cache', '_number_parts', '_string_processing', '_value_maps', 'number_in_words', 'number_in_words_from_phrase']
+['__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__path__', '__spec__', '_numbers_in_words_modules', 'number_in_words', 'number_in_words_from_phrase']
 >>> 
 ```
 

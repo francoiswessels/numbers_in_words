@@ -30,7 +30,7 @@ class NumberParts:
     @property
     def is_valid(self) -> bool:
         return True if self.integer else False
-    
+
     def __eq__(self, other: object) -> bool:
         if not isinstance(other, NumberParts):
             return False

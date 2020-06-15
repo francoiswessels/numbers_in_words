@@ -16,9 +16,9 @@ from functools import lru_cache
 from typing import Union, Tuple, cast
 from enum import Enum
 
-from . import _conditional_cache as cc
-from . import _number_parts as np
-from . import _value_maps as maps
+from . import conditional_cache as cc
+from . import number_parts as np
+from . import value_maps as maps
 
 conditional_block_cache = cc.ConditionalLRUCache()
 conditional_number_cache = cc.ConditionalLRUCache()
