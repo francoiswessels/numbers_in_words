@@ -115,12 +115,12 @@ def _get_number_in_words_from_parts(number_parts: np.NumberParts):
 
 def _get_number_parts_from_phrase(phrase: str) -> np.NumberParts:
     # Only clean up numbers that have a chance of being a number
-    maybe_digits = [_get_number_parts_from_word(word) for word in phrase.split(" ") if _is_number_like(word)]
+    maybe_numbers = [_get_number_parts_from_word(word) for word in phrase.split(" ") if _is_number_like(word)]
 
     # If only one number-like string was found and we can actually interpret it as a number,
     # then we have found what we are looking for.
-    if len(maybe_digits) == 1 and maybe_digits[0].is_valid:
-        return maybe_digits[0]
+    if len(maybe_numbers) == 1 and maybe_numbers[0].is_valid:
+        return maybe_numbers[0]
 
     return np.NumberParts()
 
