@@ -80,6 +80,15 @@ For ease of use, it was important that the package interface is clean i.e. that 
 >>> 
 ```
 
+### Assumptions
+
+- Numbers can have both whole number and decimal components.
+- Negative numbers are indicated by a "-" prefix.
+- Suffixes ("km", "kg", "ikko", etc.) can exist and are treated as arbitrary i.e. we don't get involved with the meaning of "ikko".
+- Decimal points are "."
+- Thousands separators are "," and are optional. However, if they are present in a string they must be used concistently through the string.
+- Only phrases with one number in them will be successfully procesed. If it appears that there is more than one number, an invalid response is returned.
+
 ### Algorithm
 
 Two approaches were investigated and the faster one selected and then refined and extended. The difference between the approaches lies in whether the numbers are converted to integers, or not.
