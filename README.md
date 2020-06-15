@@ -84,6 +84,7 @@ For ease of use, it was important that the package interface is clean i.e. that 
 
 - Numbers can have both whole number and decimal components.
 - Negative numbers are indicated by a "-" prefix.
+- No other prefixes are recognised and will be interpreted to mean that what follows is not a number.
 - Suffixes ("km", "kg", "ikko", etc.) can exist and are treated as arbitrary i.e. we don't get involved with the meaning of "ikko".
 - Decimal points are "."
 - Thousands separators are "," and are optional. However, if they are present in a string they must be used concistently through the string.
